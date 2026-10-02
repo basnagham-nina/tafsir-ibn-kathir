@@ -1,0 +1,2893 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+
+<meta name="theme-color" content="#f6f3ed">
+
+<title>تفسير إبن كثير</title>
+
+<style>
+
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+}
+
+body{
+  font-family:"Noto Naskh Arabic","Amiri","Noto Sans Arabic",Tahoma,Arial,sans-serif;
+  background:#f5f2eb;
+  color:#292722;
+  overscroll-behavior:none;
+}
+
+button,input{
+  font:inherit;
+}
+
+button{
+  cursor:pointer;
+}
+
+body.dark{
+  background:#151515;
+  color:#eee;
+}
+
+
+/* =========================================================
+   APP
+========================================================= */
+
+#app{
+  width:100%;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  background:#f5f2eb;
+}
+
+body.dark #app{
+  background:#151515;
+}
+
+
+/* =========================================================
+   TOP BAR
+========================================================= */
+
+.topbar{
+  height:78px;
+  flex-shrink:0;
+
+  padding:
+    calc(7px + env(safe-area-inset-top))
+    12px
+    7px;
+
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  background:rgba(255,255,255,.97);
+
+  border-bottom:1px solid #e5e0d7;
+
+  box-shadow:0 2px 12px rgba(0,0,0,.05);
+
+  z-index:30;
+}
+
+body.dark .topbar{
+  background:#202020;
+  border-color:#363636;
+}
+
+.icon-btn{
+  width:43px;
+  height:43px;
+  flex:0 0 43px;
+
+  border:0;
+  border-radius:13px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:#f0ede7;
+  color:#514c43;
+
+  font-size:20px;
+
+  transition:
+    transform .12s ease,
+    background .15s ease;
+}
+
+.icon-btn:active{
+  transform:scale(.90);
+}
+
+body.dark .icon-btn{
+  background:#303030;
+  color:#eee;
+}
+
+.top-title{
+  flex:1;
+  min-width:0;
+  text-align:center;
+}
+
+.top-title h1{
+  margin:0;
+
+  font-size:19px;
+  line-height:23px;
+  font-weight:700;
+
+  color:#28251f;
+}
+
+.top-title div{
+  margin-top:1px;
+
+  font-size:11px;
+
+  color:#898378;
+}
+
+body.dark .top-title h1{
+  color:#f4f4f4;
+}
+
+body.dark .top-title div{
+  color:#999;
+}
+
+#favoriteBtn.active{
+  background:#f3e3ad;
+  color:#a46b00;
+}
+
+body.dark #favoriteBtn.active{
+  background:#594a1b;
+  color:#ffd65a;
+}
+
+
+/* =========================================================
+   VIEWER
+========================================================= */
+
+#viewer{
+  position:relative;
+
+  flex:1;
+  min-height:0;
+  width:100%;
+
+  overflow:hidden;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:
+    linear-gradient(
+      135deg,
+      #e9e5dc,
+      #f4f1ea
+    );
+
+  touch-action:none;
+
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+
+  overscroll-behavior:none;
+}
+
+body.dark #viewer{
+  background:#0d0d0d;
+}
+
+
+/* =========================================================
+   PAGE
+========================================================= */
+
+#pageContainer{
+  position:absolute;
+
+  left:50%;
+  top:50%;
+
+  transform:
+    translate3d(-50%,-50%,0)
+    scale3d(1,1,1);
+
+  transform-origin:center center;
+
+  background:#fff;
+
+  border-radius:2px;
+
+  box-shadow:
+    0 5px 25px rgba(0,0,0,.22);
+
+  will-change:transform;
+
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+
+  overflow:hidden;
+}
+
+#pdfCanvas{
+  display:block;
+
+  width:auto;
+  height:auto;
+
+  max-width:none;
+  max-height:none;
+
+  background:#fff;
+
+  image-rendering:auto;
+
+  transform:translateZ(0);
+
+  backface-visibility:hidden;
+
+  touch-action:none;
+
+  user-select:none;
+  -webkit-user-select:none;
+  -webkit-touch-callout:none;
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+#status{
+  position:absolute;
+
+  top:12px;
+  left:50%;
+
+  transform:translateX(-50%);
+
+  z-index:10;
+
+  padding:6px 13px;
+
+  border-radius:20px;
+
+  background:rgba(255,255,255,.88);
+
+  color:#777;
+
+  font:11px Arial,sans-serif;
+
+  white-space:nowrap;
+
+  pointer-events:none;
+
+  opacity:0;
+
+  transition:opacity .2s ease;
+}
+
+#status.show{
+  opacity:1;
+}
+
+body.dark #status{
+  background:rgba(38,38,38,.92);
+  color:#bbb;
+}
+
+
+/* =========================================================
+   BOTTOM BAR
+========================================================= */
+
+.bottom-bar{
+  height:58px;
+  flex-shrink:0;
+
+  padding:
+    5px
+    12px
+    calc(5px + env(safe-area-inset-bottom));
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  background:rgba(255,255,255,.98);
+
+  border-top:1px solid #e5e0d7;
+
+  z-index:30;
+  margin-bottom: 50px;
+}
+
+body.dark .bottom-bar{
+  background:#1d1d1d;
+  border-color:#353535;
+}
+
+.page-info{
+  height:39px;
+  min-width:100px;
+
+  padding:0 12px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  gap:3px;
+
+  border-radius:12px;
+
+  background:#f0ede7;
+  color:#575248;
+
+  font:13px Arial,sans-serif;
+}
+
+body.dark .page-info{
+  background:#303030;
+  color:#ddd;
+}
+
+#pageNumber{
+  width:55px;
+
+  border:0;
+  outline:0;
+
+  background:transparent;
+  color:inherit;
+
+  text-align:center;
+
+  font-size:14px;
+}
+
+
+/* =========================================================
+   PANELS
+========================================================= */
+
+.panel-overlay{
+  position:fixed;
+
+  inset:0;
+
+  display:none;
+
+  align-items:flex-end;
+
+  background:rgba(0,0,0,.48);
+
+  z-index:100;
+}
+
+.panel-overlay.show{
+  display:flex;
+}
+
+.panel{
+  width:100%;
+  max-height:88vh;
+
+  overflow:hidden;
+
+  background:#fff;
+
+  border-radius:
+    24px
+    24px
+    0
+    0;
+
+  box-shadow:
+    0 -10px 40px rgba(0,0,0,.25);
+
+  animation:panelUp .22s ease;
+}
+
+body.dark .panel{
+  background:#222;
+  color:#fff;
+}
+
+@keyframes panelUp{
+
+  from{
+    transform:translateY(100%);
+  }
+
+  to{
+    transform:translateY(0);
+  }
+
+}
+
+.panel-head{
+  padding:15px 16px 10px;
+
+  border-bottom:1px solid #e6e1d9;
+}
+
+body.dark .panel-head{
+  border-color:#3a3a3a;
+}
+
+.panel-title{
+  min-height:38px;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:10px;
+
+  margin-bottom:10px;
+}
+
+.panel-title strong{
+  font-size:18px;
+}
+
+.close-btn{
+  width:36px;
+  height:36px;
+
+  border:0;
+  border-radius:11px;
+
+  background:#f0ede7;
+  color:#444;
+
+  font-size:19px;
+}
+
+body.dark .close-btn{
+  background:#353535;
+  color:#fff;
+}
+
+.search{
+  width:100%;
+  height:43px;
+
+  padding:0 13px;
+
+  border:1px solid #ddd7ce;
+  border-radius:12px;
+
+  outline:0;
+
+  background:#faf9f6;
+  color:#222;
+
+  font-size:14px;
+}
+
+body.dark .search{
+  background:#303030;
+  border-color:#484848;
+  color:#fff;
+}
+
+.panel-list{
+  max-height:calc(88vh - 130px);
+
+  overflow-y:auto;
+
+  -webkit-overflow-scrolling:touch;
+
+  padding:12px;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
+
+  gap:8px;
+}
+
+.list-item{
+  min-height:52px;
+
+  padding:8px 10px;
+
+  display:flex;
+  align-items:center;
+
+  gap:9px;
+
+  border:1px solid #e4dfd6;
+  border-radius:13px;
+
+  background:#faf9f6;
+
+  transition:transform .1s ease;
+}
+
+.list-item:active{
+  transform:scale(.97);
+}
+
+body.dark .list-item{
+  background:#2d2d2d;
+  border-color:#424242;
+}
+
+.item-number{
+  width:31px;
+  height:31px;
+
+  flex:0 0 31px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:50%;
+
+  background:#e9e4da;
+  color:#625c52;
+
+  font:12px Arial,sans-serif;
+}
+
+body.dark .item-number{
+  background:#4a4a4a;
+  color:#ddd;
+}
+
+.item-name{
+  flex:1;
+  min-width:0;
+
+  font-size:14px;
+  font-weight:700;
+}
+
+.item-page{
+  color:#999;
+
+  font:10px Arial,sans-serif;
+
+  white-space:nowrap;
+}
+
+.empty{
+  grid-column:1/-1;
+
+  padding:38px 15px;
+
+  text-align:center;
+
+  color:#888;
+
+  font-size:14px;
+}
+
+@media(min-width:700px){
+
+  .panel{
+    width:620px;
+
+    margin-bottom:15px;
+
+    border-radius:22px;
+  }
+
+  .panel-list{
+    grid-template-columns:
+      repeat(3,minmax(0,1fr));
+  }
+
+}
+
+@media(max-width:380px){
+
+  .topbar{
+    height:73px;
+  }
+
+  .icon-btn{
+    width:40px;
+    height:40px;
+    flex-basis:40px;
+  }
+
+  .top-title h1{
+    font-size:17px;
+  }
+
+  .bottom-bar{
+    height:54px;
+  }
+
+}
+footer {
+  text-align: center;
+  padding: 12px;
+  font-size: 12px;
+  opacity: 0.7;
+  position: fixed;
+  bottom: 5px;
+  right: 20px;
+  color: #777;
+z-index: 10000;
+  border-top: 1px solid rgba(128, 128, 128, .2);
+}
+</style>
+
+</head>
+
+<body>
+
+<div id="app">
+
+<header class="topbar">
+
+<button id="menuBtn" class="icon-btn" aria-label="الفهرس">
+☰
+</button>
+
+<div class="top-title">
+
+<h1>تفسير إبن كثير</h1>
+
+<div></div>
+
+</div>
+
+<button id="favoriteBtn" class="icon-btn" aria-label="تفضيل الصفحة">
+☆
+</button>
+
+<button id="themeBtn" class="icon-btn" aria-label="الوضع الليلي">
+☾
+</button>
+
+</header>
+
+
+<main id="viewer">
+
+<div id="status">
+جاري التحميل...
+</div>
+
+<div id="pageContainer">
+
+<canvas id="pdfCanvas"></canvas>
+
+</div>
+
+</main>
+
+
+<div class="bottom-bar">
+
+<div class="page-info">
+
+<input
+  id="pageNumber"
+  type="number"
+  min="1"
+  max="4149"
+  value="1"
+  inputmode="numeric"
+>
+
+<span>/</span>
+
+<span id="totalPages">
+4149
+</span>
+
+</div>
+
+</div>
+<footer class="app-footer">
+  Copyright © <span id="year"></span> B.N. All Rights Reserved.
+</footer>
+
+</div>
+
+
+<!-- =====================================================
+     SURAH PANEL
+===================================================== -->
+
+<div id="menuPanel" class="panel-overlay">
+
+<div class="panel">
+
+<div class="panel-head">
+
+<div class="panel-title">
+
+<strong>📖 فهرس السور</strong>
+
+<button id="closeMenu" class="close-btn">
+×
+</button>
+
+</div>
+
+<input
+  id="surahSearch"
+  class="search"
+  type="search"
+  placeholder="ابحث عن سورة..."
+  autocomplete="off"
+>
+
+</div>
+
+<div id="surahList" class="panel-list"></div>
+
+</div>
+
+</div>
+
+
+<!-- =====================================================
+     FAVORITES PANEL
+===================================================== -->
+
+<div id="favoritesPanel" class="panel-overlay">
+
+<div class="panel">
+
+<div class="panel-head">
+
+<div class="panel-title">
+
+<strong>⭐ الصفحات المفضلة</strong>
+
+<button id="closeFavorites" class="close-btn">
+×
+</button>
+
+</div>
+
+</div>
+
+<div id="favoritesList" class="panel-list"></div>
+
+</div>
+
+</div>
+
+
+<script src="./pdfjs/pdf.js"></script>
+
+<script>
+
+"use strict";
+
+document.getElementById("year").textContent = new Date().getFullYear();
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const PDF_PATH = "./pdf.pdf";
+
+const FAVORITES_KEY =
+  "tafseer_favorite_pages";
+
+const LAST_PAGE_KEY =
+  "tafseer_last_page";
+
+const THEME_KEY =
+  "tafseer_theme";
+
+const MAX_ZOOM = 4;
+
+const MAX_CANVAS_PIXELS =
+  12000000;
+
+
+if(typeof pdfjsLib !== "undefined"){
+
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "./pdfjs/pdf.worker.js";
+
+}
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const viewer =
+  document.getElementById("viewer");
+
+const pageContainer =
+  document.getElementById("pageContainer");
+
+const canvas =
+  document.getElementById("pdfCanvas");
+
+const pageNumber =
+  document.getElementById("pageNumber");
+
+const totalPages =
+  document.getElementById("totalPages");
+
+const status =
+  document.getElementById("status");
+
+const favoriteBtn =
+  document.getElementById("favoriteBtn");
+
+const themeBtn =
+  document.getElementById("themeBtn");
+
+const menuPanel =
+  document.getElementById("menuPanel");
+
+const favoritesPanel =
+  document.getElementById("favoritesPanel");
+
+const surahList =
+  document.getElementById("surahList");
+
+const favoritesList =
+  document.getElementById("favoritesList");
+
+const surahSearch =
+  document.getElementById("surahSearch");
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let pdfDoc = null;
+
+let currentPage = 1;
+
+let renderSequence = 0;
+
+let activeRenderTask = null;
+
+
+/* =========================================================
+   SURAH DATA
+========================================================= */
+
+const surahs = [
+
+  ["الفاتحة", 41],
+  ["البقرة", 92],
+  ["آل عمران", 759],
+  ["النساء", 984],
+  ["المائدة", 1216],
+  ["الأنعام", 1406],
+  ["الأعراف", 1525],
+  ["الأنفال", 1648],
+  ["التوبة", 1724],
+  ["يونس", 1850],
+  ["هود", 1943],
+  ["يوسف", 1995],
+  ["الرعد", 2049],
+  ["إبراهيم", 2089],
+  ["الحجر", 2130],
+  ["النحل", 2156],
+  ["الإسراء", 2210],
+  ["الكهف", 2330],
+  ["مريم", 2398],
+  ["طه", 2452],
+  ["الأنبياء", 2505],
+  ["الحج", 2557],
+  ["المؤمنون", 2615],
+  ["النور", 2653],
+  ["الفرقان", 2735],
+  ["الشعراء", 2773],
+  ["النمل", 2814],
+  ["القصص", 2852],
+  ["العنكبوت", 2893],
+  ["الروم", 2923],
+  ["لقمان", 2951],
+  ["السجدة", 2977],
+  ["الأحزاب", 2991],
+  ["سبأ", 3095],
+  ["فاطر", 3131],
+  ["يس", 3159],
+  ["الصافات", 3194],
+  ["ص", 3233],
+  ["الزمر", 3265],
+  ["غافر", 3306],
+  ["فصلت", 3339],
+  ["الشورى", 3364],
+  ["الزخرف", 3392],
+  ["الدخان", 3417],
+  ["الجاثية", 3435],
+  ["الأحقاف", 3444],
+  ["محمد", 3476],
+  ["الفتح", 3492],
+  ["الحجرات", 3532],
+  ["ق", 3558],
+  ["الذاريات", 3577],
+  ["الطور", 3589],
+  ["النجم", 3602],
+
+  ["القمر", null],
+
+  ["الرحمن", 3626],
+  ["الواقعة", 3646],
+  ["الحديد", 3682],
+  ["المجادلة", 3709],
+  ["الحشر", 3729],
+  ["الممتحنة", 3753],
+
+  ["الصف", null],
+
+  ["الجمعة", 3774],
+  ["المنافقون", 3783],
+  ["التغابن", 3792],
+  ["الطلاق", 3799],
+  ["التحريم", 3813],
+  ["الملك", 3829],
+  ["القلم", 3837],
+  ["الحاقة", 3850],
+  ["المعارج", 3860],
+  ["نوح", 3870],
+  ["الجن", 3876],
+  ["المزمل", 3886],
+  ["المدثر", 3897],
+  ["القيامة", 3909],
+  ["الإنسان", 3918],
+  ["المرسلات", 3936],
+  ["النبأ", 3946],
+  ["النازعات", 3953],
+  ["عبس", 3965],
+  ["التكوير", 3973],
+  ["الانفطار", 3983],
+  ["المطففين", 3987],
+  ["الانشقاق", 3994],
+  ["البروج", 4000],
+  ["الطارق", 4010],
+  ["الأعلى", 4013],
+  ["الغاشية", 4018],
+  ["الفجر", 4023],
+  ["البلد", 4033],
+  ["الشمس", 4040],
+  ["الليل", 4044],
+  ["الضحى", 4050],
+  ["الشرح", 4055],
+  ["التين", 4059],
+  ["العلق", 4061],
+  ["القدر", 4065],
+  ["البينة", 4076],
+  ["الزلزلة", 4080],
+  ["العاديات", 4085],
+  ["القارعة", 4087],
+  ["التكاثر", 4090],
+  ["العصر", 4096],
+  ["الهمزة", 4097],
+  ["الفيل", 4098],
+  ["قريش", 4106],
+  ["الماعون", 4107],
+  ["الكوثر", 4111],
+  ["الكافرون", 4118],
+  ["النصر", 4120],
+  ["المسد", 4125],
+  ["الإخلاص", 4128],
+  ["الفلق", 4138],
+  ["الناس", 4146]
+
+];
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+let statusTimer = null;
+
+function showStatus(message){
+
+  status.textContent = message;
+
+  status.classList.add("show");
+
+  clearTimeout(statusTimer);
+
+  statusTimer =
+    setTimeout(() => {
+
+      status.classList.remove("show");
+
+    },1400);
+
+}
+
+
+/* =========================================================
+   FAVORITES
+========================================================= */
+
+function getFavorites(){
+
+  try{
+
+    const value =
+      JSON.parse(
+        localStorage.getItem(
+          FAVORITES_KEY
+        ) || "[]"
+      );
+
+    if(!Array.isArray(value)){
+      return [];
+    }
+
+    return [
+      ...new Set(
+        value
+          .map(Number)
+          .filter(
+            page =>
+              Number.isInteger(page) &&
+              page >= 1 &&
+              page <= 4149
+          )
+      )
+    ];
+
+  }catch(error){
+
+    return [];
+
+  }
+
+}
+
+
+function saveFavorites(list){
+
+  localStorage.setItem(
+    FAVORITES_KEY,
+    JSON.stringify(
+      [...new Set(list)]
+    )
+  );
+
+}
+
+
+function isFavorite(page){
+
+  return getFavorites()
+    .includes(Number(page));
+
+}
+
+
+function updateFavorite(){
+
+  const active =
+    isFavorite(currentPage);
+
+  favoriteBtn.classList.toggle(
+    "active",
+    active
+  );
+
+  favoriteBtn.textContent =
+    active ? "★" : "☆";
+
+}
+
+
+function toggleFavorite(){
+
+  let favorites =
+    getFavorites();
+
+  if(
+    favorites.includes(currentPage)
+  ){
+
+    favorites =
+      favorites.filter(
+        page =>
+          page !== currentPage
+      );
+
+    showStatus(
+      "تمت إزالة الصفحة من المفضلة"
+    );
+
+  }else{
+
+    favorites.push(
+      currentPage
+    );
+
+    showStatus(
+      "تمت إضافة الصفحة إلى المفضلة ⭐"
+    );
+
+  }
+
+  saveFavorites(favorites);
+
+  updateFavorite();
+
+  buildFavorites();
+
+}
+
+
+/* =========================================================
+   FAVORITE BUTTON
+========================================================= */
+
+let favoriteHoldTimer = null;
+
+let favoriteLongPress = false;
+
+favoriteBtn.addEventListener(
+  "pointerdown",
+  () => {
+
+    favoriteLongPress = false;
+
+    clearTimeout(
+      favoriteHoldTimer
+    );
+
+    favoriteHoldTimer =
+      setTimeout(() => {
+
+        favoriteLongPress = true;
+
+        buildFavorites();
+
+        openPanel(
+          favoritesPanel
+        );
+
+      },650);
+
+  }
+);
+
+
+favoriteBtn.addEventListener(
+  "pointerup",
+  () => {
+
+    clearTimeout(
+      favoriteHoldTimer
+    );
+
+  }
+);
+
+
+favoriteBtn.addEventListener(
+  "pointercancel",
+  () => {
+
+    clearTimeout(
+      favoriteHoldTimer
+    );
+
+  }
+);
+
+
+favoriteBtn.addEventListener(
+  "click",
+  () => {
+
+    if(favoriteLongPress){
+
+      favoriteLongPress = false;
+
+      return;
+
+    }
+
+    toggleFavorite();
+
+  }
+);
+
+
+/* =========================================================
+   FAVORITES LIST
+========================================================= */
+
+function buildFavorites(){
+
+  favoritesList.innerHTML = "";
+
+  const favorites =
+    getFavorites().sort(
+      (a,b) => a-b
+    );
+
+  if(!favorites.length){
+
+    favoritesList.innerHTML = `
+      <div class="empty">
+        لا توجد صفحات مفضلة
+      </div>
+    `;
+
+    return;
+  }
+
+  favorites.forEach(
+    page => {
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "list-item";
+
+      item.innerHTML = `
+        <div class="item-number">★</div>
+        <div class="item-name">
+          الصفحة ${page}
+        </div>
+        <div class="item-page">
+          فتح
+        </div>
+      `;
+
+      item.addEventListener(
+        "click",
+        () => {
+
+          goToPage(page);
+
+          closePanel(
+            favoritesPanel
+          );
+
+        }
+      );
+
+      favoritesList.appendChild(
+        item
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   SURAH LIST
+========================================================= */
+
+function buildSurahs(search = ""){
+
+  surahList.innerHTML = "";
+
+  const q =
+    search.trim();
+
+  surahs.forEach(
+    (surah,index) => {
+
+      const name =
+        surah[0];
+
+      const page =
+        surah[1];
+
+      if(
+        q &&
+        !name.includes(q)
+      ){
+
+        return;
+
+      }
+
+      const item =
+        document.createElement("div");
+
+      item.className =
+        "list-item";
+
+      item.innerHTML = `
+        <div class="item-number">
+          ${index + 1}
+        </div>
+
+        <div class="item-name">
+          سورة ${name}
+        </div>
+
+        <div class="item-page">
+          ${
+            page === null
+              ? "غير موجود"
+              : page
+          }
+        </div>
+      `;
+
+
+      if(page !== null){
+
+        item.addEventListener(
+          "click",
+          () => {
+
+            goToPage(page);
+
+            closePanel(
+              menuPanel
+            );
+
+          }
+        );
+
+      }else{
+
+        item.style.opacity = "0.55";
+
+      }
+
+
+      surahList.appendChild(
+        item
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   PANELS
+========================================================= */
+
+function openPanel(panel){
+
+  panel.classList.add("show");
+
+}
+
+
+function closePanel(panel){
+
+  panel.classList.remove("show");
+
+}
+
+
+document
+  .getElementById("menuBtn")
+  .addEventListener(
+    "click",
+    () => {
+
+      buildSurahs();
+
+      surahSearch.value = "";
+
+      openPanel(
+        menuPanel
+      );
+
+    }
+  );
+
+
+document
+  .getElementById("closeMenu")
+  .addEventListener(
+    "click",
+    () => {
+
+      closePanel(
+        menuPanel
+      );
+
+    }
+  );
+
+
+document
+  .getElementById("closeFavorites")
+  .addEventListener(
+    "click",
+    () => {
+
+      closePanel(
+        favoritesPanel
+      );
+
+    }
+  );
+
+
+menuPanel.addEventListener(
+  "click",
+  e => {
+
+    if(
+      e.target === menuPanel
+    ){
+
+      closePanel(
+        menuPanel
+      );
+
+    }
+
+  }
+);
+
+
+favoritesPanel.addEventListener(
+  "click",
+  e => {
+
+    if(
+      e.target === favoritesPanel
+    ){
+
+      closePanel(
+        favoritesPanel
+      );
+
+    }
+
+  }
+);
+
+
+surahSearch.addEventListener(
+  "input",
+  () => {
+
+    buildSurahs(
+      surahSearch.value
+    );
+
+  }
+);
+
+
+/* =========================================================
+   THEME
+========================================================= */
+
+function applyTheme(){
+
+  const dark =
+    localStorage.getItem(
+      THEME_KEY
+    ) === "dark";
+
+  document.body.classList.toggle(
+    "dark",
+    dark
+  );
+
+  themeBtn.textContent =
+    dark ? "☀" : "☾";
+
+}
+
+
+themeBtn.addEventListener(
+  "click",
+  () => {
+
+    const dark =
+      !document.body.classList.contains(
+        "dark"
+      );
+
+    document.body.classList.toggle(
+      "dark",
+      dark
+    );
+
+    localStorage.setItem(
+      THEME_KEY,
+      dark
+        ? "dark"
+        : "light"
+    );
+
+    themeBtn.textContent =
+      dark ? "☀" : "☾";
+
+  }
+);
+
+
+/* =========================================================
+   PDF LOAD
+========================================================= */
+
+async function loadPDF() {
+
+  try {
+
+    showStatus("جاري تحميل الكتاب...");
+
+    if (typeof pdfjsLib === "undefined") {
+      throw new Error("PDF.js غير محمل");
+    }
+
+    pdfDoc = await pdfjsLib.getDocument({
+    
+      url: PDF_PATH,
+    
+      disableFontFace: false,
+    
+      useSystemFonts: true,
+    
+      fontExtraProperties: false,
+    
+      isEvalSupported: true,
+    
+      verbosity: 0
+    
+    }).promise;
+
+
+    totalPages.textContent =
+      pdfDoc.numPages;
+
+    pageNumber.max =
+      pdfDoc.numPages;
+
+
+    const saved =
+      parseInt(
+        localStorage.getItem(
+          LAST_PAGE_KEY
+        ),
+        10
+      );
+
+
+    if (
+      Number.isInteger(saved) &&
+      saved >= 1 &&
+      saved <= pdfDoc.numPages
+    ) {
+
+      currentPage = saved;
+
+    } else {
+
+      currentPage = 1;
+
+    }
+
+
+    pageNumber.value =
+      currentPage;
+
+
+    await renderPage(
+      currentPage
+    );
+
+
+  } catch (error) {
+
+    console.error(
+      "PDF loading error:",
+      error
+    );
+
+    showStatus(
+      "تعذر تحميل ملف PDF"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   PDF RENDER
+========================================================= */
+
+async function renderPage(pageNum){
+
+if(!pdfDoc) return;
+
+pageNum = parseInt(pageNum, 10);
+
+if(
+!Number.isInteger(pageNum) ||
+pageNum < 1 ||
+pageNum > pdfDoc.numPages
+){
+return;
+}
+
+const sequence = ++renderSequence;
+
+if(activeRenderTask){
+
+try{
+  activeRenderTask.cancel();
+}catch(_){}
+
+activeRenderTask = null;
+
+}
+
+try{
+
+showStatus("جاري عرض الصفحة...");
+
+const page =
+  await pdfDoc.getPage(pageNum);
+
+if(sequence !== renderSequence){
+  return;
+}
+
+/*
+ * الحجم الأصلي للصفحة
+ */
+const originalViewport =
+  page.getViewport({
+    scale:1
+  });
+
+/*
+ * المساحة المتاحة
+ */
+const availableWidth =
+  Math.max(
+    100,
+    viewer.clientWidth - 8
+  );
+
+const availableHeight =
+  Math.max(
+    100,
+    viewer.clientHeight - 8
+  );
+
+/*
+ * ملاءمة الصفحة للشاشة
+ */
+let fitScale =
+  Math.min(
+    availableWidth /
+      originalViewport.width,
+
+    availableHeight /
+      originalViewport.height
+  );
+
+if(
+  !Number.isFinite(fitScale) ||
+  fitScale <= 0
+){
+  fitScale = 1;
+}
+
+/*
+ * =====================================================
+ * دقة عالية للنص العربي
+ * =====================================================
+ *
+ * نرفع دقة الرسم إلى 3x على الأجهزة العادية
+ * و 3.5x على الأجهزة ذات الشاشة عالية الكثافة.
+ */
+
+const devicePixelRatio =
+  window.devicePixelRatio || 1;
+
+const qualityScale =
+  Math.min(
+    Math.max(
+      devicePixelRatio,
+      2.5
+    ),
+    3.5
+  );
+
+/*
+ * دقة الرسم النهائية
+ */
+let renderScale =
+  fitScale *
+  qualityScale;
+
+/*
+ * =====================================================
+ * حماية الذاكرة
+ * =====================================================
+ */
+
+const sourcePixels =
+  originalViewport.width *
+  originalViewport.height;
+
+let pixels =
+  sourcePixels *
+  renderScale *
+  renderScale;
+
+const MAX_PIXELS =
+  24000000;
+
+if(pixels > MAX_PIXELS){
+
+  renderScale =
+    Math.sqrt(
+      MAX_PIXELS /
+      sourcePixels
+    );
+
+  pixels =
+    sourcePixels *
+    renderScale *
+    renderScale;
+}
+
+/*
+ * Viewport عالي الدقة للرسم
+ */
+const viewport =
+  page.getViewport({
+    scale:renderScale
+  });
+
+/*
+ * الحجم المرئي الحقيقي على الشاشة
+ *
+ * لا نستخدم renderScale مباشرة للعرض،
+ * حتى لا تصبح الصفحة أكبر من الشاشة.
+ */
+
+const displayScale =
+  renderScale /
+  qualityScale;
+
+const displayViewport =
+  page.getViewport({
+    scale:displayScale
+  });
+
+/*
+ * حذف Canvas القديم
+ */
+pageContainer.innerHTML = "";
+
+/*
+ * إنشاء Canvas جديد
+ */
+const newCanvas =
+  document.createElement("canvas");
+
+newCanvas.id =
+  "pdfCanvas";
+
+/*
+ * =====================================================
+ * الحجم الداخلي عالي الدقة
+ * =====================================================
+ */
+
+newCanvas.width =
+  Math.ceil(viewport.width);
+
+newCanvas.height =
+  Math.ceil(viewport.height);
+
+/*
+ * =====================================================
+ * الحجم الظاهر
+ * =====================================================
+ */
+
+newCanvas.style.width =
+  Math.ceil(
+    displayViewport.width
+  ) + "px";
+
+newCanvas.style.height =
+  Math.ceil(
+    displayViewport.height
+  ) + "px";
+
+newCanvas.style.display =
+  "block";
+
+newCanvas.style.maxWidth =
+  "none";
+
+newCanvas.style.maxHeight =
+  "none";
+
+newCanvas.style.background =
+  "#ffffff";
+
+/*
+ * مهم جدًا:
+ * لا نستخدم image-rendering: crisp-edges
+ * لأنه قد يجعل الحروف العربية خشنة.
+ */
+
+newCanvas.style.imageRendering =
+  "auto";
+
+newCanvas.setAttribute(
+  "dir",
+  "ltr"
+);
+
+/*
+ * إضافة Canvas
+ */
+pageContainer.appendChild(
+  newCanvas
+);
+
+/*
+ * حجم الحاوية
+ */
+pageContainer.style.width =
+  Math.ceil(
+    displayViewport.width
+  ) + "px";
+
+pageContainer.style.height =
+  Math.ceil(
+    displayViewport.height
+  ) + "px";
+
+/*
+ * إعادة التكبير والوضع
+ */
+zoom = 1;
+panX = 0;
+panY = 0;
+
+applyTransform();
+
+/*
+ * =====================================================
+ * Canvas Context
+ * =====================================================
+ */
+
+const ctx =
+  newCanvas.getContext(
+    "2d",
+    {
+      alpha:false,
+      desynchronized:false
+    }
+  );
+
+/*
+ * تحسين تنعيم الحروف
+ */
+ctx.imageSmoothingEnabled =
+  true;
+
+ctx.imageSmoothingQuality =
+  "high";
+
+/*
+ * خلفية الصفحة
+ */
+ctx.fillStyle =
+  "#ffffff";
+
+ctx.fillRect(
+  0,
+  0,
+  newCanvas.width,
+  newCanvas.height
+);
+
+/*
+ * =====================================================
+ * PDF.js Render
+ * =====================================================
+ */
+
+activeRenderTask =
+  page.render({
+
+    canvasContext:
+      ctx,
+
+    viewport:
+      viewport,
+
+    intent:
+      "display",
+
+    background:
+      "#ffffff",
+
+    annotationMode:
+      pdfjsLib.AnnotationMode
+        ? pdfjsLib.AnnotationMode.DISABLE
+        : undefined
+
+  });
+
+await activeRenderTask.promise;
+
+if(
+  sequence !== renderSequence
+){
+  return;
+}
+
+activeRenderTask = null;
+
+/*
+ * تحديث الصفحة الحالية
+ */
+currentPage =
+  pageNum;
+
+pageNumber.value =
+  pageNum;
+
+totalPages.textContent =
+  pdfDoc.numPages;
+
+/*
+ * حفظ آخر صفحة
+ */
+localStorage.setItem(
+  LAST_PAGE_KEY,
+  String(pageNum)
+);
+
+/*
+ * تحديث المفضلة
+ */
+updateFavorite();
+
+status.classList.remove(
+  "show"
+);
+
+}catch(error){
+
+if(
+  error &&
+  error.name ===
+  "RenderingCancelledException"
+){
+  return;
+}
+
+console.error(
+  "PDF render error:",
+  error
+);
+
+activeRenderTask = null;
+
+showStatus(
+  "خطأ في عرض الصفحة"
+);
+
+}
+
+}
+
+/* =========================================================
+   PAGE NAVIGATION
+========================================================= */
+
+function goToPage(page){
+
+  if(!pdfDoc){
+    return;
+  }
+
+  page =
+    parseInt(
+      page,
+      10
+    );
+
+
+  if(
+    !Number.isInteger(page) ||
+    page < 1 ||
+    page > pdfDoc.numPages
+  ){
+
+    pageNumber.value =
+      currentPage;
+
+    return;
+
+  }
+
+
+  renderPage(page);
+
+}
+
+
+pageNumber.addEventListener(
+  "change",
+  () => {
+
+    goToPage(
+      pageNumber.value
+    );
+
+  }
+);
+
+
+pageNumber.addEventListener(
+  "keydown",
+  e => {
+
+    if(
+      e.key === "Enter"
+    ){
+
+      goToPage(
+        pageNumber.value
+      );
+
+      pageNumber.blur();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   ZOOM / PAN STATE
+========================================================= */
+
+let zoom = 1;
+
+let panX = 0;
+
+let panY = 0;
+
+let pointers = new Map();
+
+let gesture = "none";
+
+let startX = 0;
+
+let startY = 0;
+
+let startPanX = 0;
+
+let startPanY = 0;
+
+let pinchStartDistance = 0;
+
+let pinchStartZoom = 1;
+
+let pinchStartPanX = 0;
+
+let pinchStartPanY = 0;
+
+let pinchStartCenterX = 0;
+
+let pinchStartCenterY = 0;
+
+let gestureMoved = false;
+
+let tapStartTime = 0;
+
+
+/* =========================================================
+   DOUBLE TAP STATE
+========================================================= */
+
+let lastTapTime = 0;
+
+let lastTapX = 0;
+
+let lastTapY = 0;
+
+
+/* =========================================================
+   PAN LIMIT
+========================================================= */
+
+function clampPan(x,y,z){
+
+  const pageWidth =
+    pageContainer.offsetWidth * z;
+
+  const pageHeight =
+    pageContainer.offsetHeight * z;
+
+  const viewWidth =
+    viewer.clientWidth;
+
+  const viewHeight =
+    viewer.clientHeight;
+
+
+  const maxX =
+    Math.max(
+      0,
+      (pageWidth - viewWidth) / 2
+    );
+
+
+  const maxY =
+    Math.max(
+      0,
+      (pageHeight - viewHeight) / 2
+    );
+
+
+  return {
+
+    x:Math.max(
+      -maxX,
+      Math.min(
+        maxX,
+        x
+      )
+    ),
+
+    y:Math.max(
+      -maxY,
+      Math.min(
+        maxY,
+        y
+      )
+    ),
+
+  };
+
+}
+
+
+/* =========================================================
+   TRANSFORM
+========================================================= */
+
+function applyTransform(){
+
+  const bounded =
+    clampPan(
+      panX,
+      panY,
+      zoom
+    );
+
+
+  panX =
+    bounded.x;
+
+  panY =
+    bounded.y;
+
+
+  pageContainer.style.transform =
+    "translate3d(" +
+    "calc(-50% + " +
+    panX +
+    "px)," +
+    "calc(-50% + " +
+    panY +
+    "px),0) " +
+    "scale3d(" +
+    zoom +
+    "," +
+    zoom +
+    ",1)";
+
+}
+
+
+/* =========================================================
+   POINTER HELPERS
+========================================================= */
+
+function getDistance(){
+
+  const points =
+    Array.from(
+      pointers.values()
+    );
+
+
+  if(points.length < 2){
+    return 0;
+  }
+
+
+  return Math.hypot(
+    points[1].x -
+      points[0].x,
+
+    points[1].y -
+      points[0].y
+  );
+
+}
+
+
+function getCenter(){
+
+  const points =
+    Array.from(
+      pointers.values()
+    );
+
+
+  if(points.length < 2){
+    return null;
+  }
+
+
+  return {
+
+    x:
+      (
+        points[0].x +
+        points[1].x
+      ) / 2,
+
+    y:
+      (
+        points[0].y +
+        points[1].y
+      ) / 2
+
+  };
+
+}
+
+
+/* =========================================================
+   POINTER DOWN
+========================================================= */
+
+viewer.addEventListener(
+  "pointerdown",
+  e => {
+
+    if(
+      e.pointerType === "mouse" &&
+      e.button !== 0
+    ){
+      return;
+    }
+
+
+    e.preventDefault();
+
+
+    pointers.set(
+      e.pointerId,
+      {
+        x:e.clientX,
+        y:e.clientY
+      }
+    );
+
+
+    try{
+
+      viewer.setPointerCapture(
+        e.pointerId
+      );
+
+    }catch(_){}
+
+
+    if(pointers.size === 2){
+
+      gesture = "pinch";
+
+      pinchStartDistance =
+        getDistance();
+
+      pinchStartZoom =
+        zoom;
+
+      pinchStartPanX =
+        panX;
+
+      pinchStartPanY =
+        panY;
+
+
+      const center =
+        getCenter();
+
+
+      if(center){
+
+        pinchStartCenterX =
+          center.x;
+
+        pinchStartCenterY =
+          center.y;
+
+      }
+
+
+      gestureMoved = true;
+
+      return;
+
+    }
+
+
+    if(pointers.size === 1){
+
+      gesture =
+        zoom > 1.01
+          ? "pan"
+          : "swipe";
+
+
+      startX =
+        e.clientX;
+
+      startY =
+        e.clientY;
+
+      startPanX =
+        panX;
+
+      startPanY =
+        panY;
+
+      gestureMoved = false;
+
+      tapStartTime =
+        performance.now();
+
+    }
+
+  },
+  {passive:false}
+);
+
+
+/* =========================================================
+   POINTER MOVE
+========================================================= */
+
+viewer.addEventListener(
+  "pointermove",
+  e => {
+
+    if(
+      !pointers.has(e.pointerId)
+    ){
+      return;
+    }
+
+
+    e.preventDefault();
+
+
+    pointers.set(
+      e.pointerId,
+      {
+        x:e.clientX,
+        y:e.clientY
+      }
+    );
+
+
+    if(pointers.size >= 2){
+
+      gesture = "pinch";
+
+
+      const distance =
+        getDistance();
+
+
+      const center =
+        getCenter();
+
+
+      if(
+        pinchStartDistance > 0 &&
+        center
+      ){
+
+        let newZoom =
+          pinchStartZoom *
+          (
+            distance /
+            pinchStartDistance
+          );
+
+
+        newZoom =
+          Math.max(
+            1,
+            Math.min(
+              MAX_ZOOM,
+              newZoom
+            )
+          );
+
+
+        const ratio =
+          newZoom /
+          pinchStartZoom;
+
+
+        panX =
+          pinchStartPanX +
+          (
+            pinchStartCenterX -
+            center.x
+          ) *
+          (ratio - 1);
+
+
+        panY =
+          pinchStartPanY +
+          (
+            pinchStartCenterY -
+            center.y
+          ) *
+          (ratio - 1);
+
+
+        zoom =
+          newZoom;
+
+
+        applyTransform();
+
+      }
+
+
+      return;
+
+    }
+
+
+    if(
+      pointers.size === 1 &&
+      gesture === "pan"
+    ){
+
+      const dx =
+        e.clientX -
+        startX;
+
+
+      const dy =
+        e.clientY -
+        startY;
+
+
+      if(
+        Math.abs(dx) > 3 ||
+        Math.abs(dy) > 3
+      ){
+
+        gestureMoved = true;
+
+      }
+
+
+      panX =
+        startPanX +
+        dx;
+
+
+      panY =
+        startPanY +
+        dy;
+
+
+      applyTransform();
+
+    }
+
+
+    if(
+      pointers.size === 1 &&
+      gesture === "swipe"
+    ){
+
+      const dx =
+        e.clientX -
+        startX;
+
+
+      const dy =
+        e.clientY -
+        startY;
+
+
+      if(
+        Math.abs(dx) > 8 ||
+        Math.abs(dy) > 8
+      ){
+
+        gestureMoved = true;
+
+      }
+
+    }
+
+  },
+  {passive:false}
+);
+
+
+/* =========================================================
+   POINTER UP
+========================================================= */
+
+viewer.addEventListener(
+  "pointerup",
+  e => {
+
+    const oldGesture =
+      gesture;
+
+
+    const endX =
+      e.clientX;
+
+    const endY =
+      e.clientY;
+
+
+    pointers.delete(
+      e.pointerId
+    );
+
+
+    try{
+
+      viewer.releasePointerCapture(
+        e.pointerId
+      );
+
+    }catch(_){}
+
+
+    if(
+      oldGesture === "pinch" &&
+      pointers.size === 1
+    ){
+
+      const p =
+        Array.from(
+          pointers.values()
+        )[0];
+
+
+      gesture = "pan";
+
+      startX = p.x;
+      startY = p.y;
+
+      startPanX = panX;
+      startPanY = panY;
+
+      gestureMoved = true;
+
+      return;
+
+    }
+
+
+    if(pointers.size !== 0){
+      return;
+    }
+
+
+    if(
+      oldGesture === "swipe" &&
+      !gestureMoved
+    ){
+
+      const now =
+        performance.now();
+
+
+      const dx =
+        endX - lastTapX;
+
+      const dy =
+        endY - lastTapY;
+
+
+      const distance =
+        Math.hypot(dx,dy);
+
+
+      if(
+        lastTapTime > 0 &&
+        now - lastTapTime < 400 &&
+        distance < 45
+      ){
+
+        zoom = 1;
+        panX = 0;
+        panY = 0;
+
+        applyTransform();
+
+        showStatus(
+          "الحجم الطبيعي"
+        );
+
+
+        lastTapTime = 0;
+
+      }else{
+
+        lastTapTime = now;
+        lastTapX = endX;
+        lastTapY = endY;
+
+      }
+
+
+      gesture = "none";
+
+      return;
+
+    }
+
+
+    if(
+      oldGesture === "swipe" &&
+      zoom <= 1.01
+    ){
+
+      const dx =
+        endX - startX;
+
+      const dy =
+        endY - startY;
+
+
+      const duration =
+        performance.now() -
+        tapStartTime;
+
+
+      const horizontal =
+        Math.abs(dx) >
+        Math.abs(dy) * 1.25;
+
+
+      if(
+        Math.abs(dx) > 65 &&
+        horizontal &&
+        duration < 900
+      ){
+
+        lastTapTime = 0;
+
+
+        if(dx < 0){
+
+          if(
+            pdfDoc &&
+            currentPage <
+            pdfDoc.numPages
+          ){
+
+            goToPage(
+              currentPage + 1
+            );
+
+          }
+
+        }else{
+
+          if(currentPage > 1){
+
+            goToPage(
+              currentPage - 1
+            );
+
+          }
+
+        }
+
+      }
+
+    }
+
+
+    gesture = "none";
+
+  },
+  {passive:false}
+);
+
+
+/* =========================================================
+   POINTER CANCEL
+========================================================= */
+
+viewer.addEventListener(
+  "pointercancel",
+  e => {
+
+    pointers.delete(
+      e.pointerId
+    );
+
+
+    if(pointers.size === 0){
+
+      gesture = "none";
+
+    }
+
+  },
+  {passive:false}
+);
+
+
+/* =========================================================
+   CONTEXT MENU
+========================================================= */
+
+viewer.addEventListener(
+  "contextmenu",
+  e => {
+
+    e.preventDefault();
+
+  }
+);
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+let resizeTimer = null;
+
+window.addEventListener(
+  "resize",
+  () => {
+
+    clearTimeout(
+      resizeTimer
+    );
+
+
+    resizeTimer =
+      setTimeout(
+        () => {
+
+          if(pdfDoc){
+
+            renderPage(
+              currentPage
+            );
+
+          }
+
+        },
+        300
+      );
+
+  }
+);
+
+
+/* =========================================================
+   ESC
+========================================================= */
+
+document.addEventListener(
+  "keydown",
+  e => {
+
+    if(e.key !== "Escape"){
+      return;
+    }
+
+
+    if(
+      menuPanel.classList.contains("show")
+    ){
+
+      closePanel(menuPanel);
+
+    }else if(
+      favoritesPanel.classList.contains("show")
+    ){
+
+      closePanel(favoritesPanel);
+
+    }else if(zoom > 1){
+
+      zoom = 1;
+      panX = 0;
+      panY = 0;
+
+      applyTransform();
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   INITIAL
+========================================================= */
+
+applyTheme();
+
+buildSurahs();
+
+buildFavorites();
+
+updateFavorite();
+
+loadPDF();
+
+</script>
+
+</body>
+</html>
